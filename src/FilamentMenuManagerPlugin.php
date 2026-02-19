@@ -11,7 +11,7 @@ class FilamentMenuManagerPlugin implements Plugin
     protected array $locations   = [];
     protected array $modelSources = [];
     protected \UnitEnum|string|null $navigationGroup = null;
-    protected string|\Illuminate\Contracts\Support\Htmlable|null $navigationIcon = null;
+    protected \BackedEnum|string|null $navigationIcon = null;
     protected ?int $navigationSort = null;
     protected string|\Illuminate\Contracts\Support\Htmlable|null $navigationLabel = null;
 
@@ -94,7 +94,7 @@ class FilamentMenuManagerPlugin implements Plugin
         return $this;
     }
 
-    public function navigationIcon(string|\Illuminate\Contracts\Support\Htmlable|null $icon): static
+    public function navigationIcon(\BackedEnum|string|null $icon): static
     {
         $this->navigationIcon = $icon;
         return $this;
@@ -117,7 +117,7 @@ class FilamentMenuManagerPlugin implements Plugin
         return $this->navigationGroup;
     }
 
-    public function getNavigationIcon(): string|\Illuminate\Contracts\Support\Htmlable|null
+    public function getNavigationIcon(): \BackedEnum|string|null
     {
         return $this->navigationIcon;
     }

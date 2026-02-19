@@ -21,7 +21,7 @@ class MenuManagerPage extends Page implements HasForms
     protected static string $view = 'filament-menu-manager::pages.menu-manager';
 
     protected static \UnitEnum|string|null $navigationGroup = 'Content';
-    protected static string|\Illuminate\Contracts\Support\Htmlable|null $navigationIcon = 'heroicon-o-bars-3';
+    protected static \BackedEnum|string|null $navigationIcon = 'heroicon-o-bars-3';
     protected static string|\Illuminate\Contracts\Support\Htmlable|null $navigationLabel = 'Menu Manager';
     protected static ?int $navigationSort = 99;
 
@@ -30,7 +30,7 @@ class MenuManagerPage extends Page implements HasForms
         return \NoteBrainsLab\FilamentMenuManager\FilamentMenuManagerPlugin::get()->getNavigationGroup() ?? static::$navigationGroup;
     }
 
-    public static function getNavigationIcon(): string|\Illuminate\Contracts\Support\Htmlable|null
+    public static function getNavigationIcon(): \BackedEnum|string|null
     {
         return \NoteBrainsLab\FilamentMenuManager\FilamentMenuManagerPlugin::get()->getNavigationIcon() ?? static::$navigationIcon;
     }
