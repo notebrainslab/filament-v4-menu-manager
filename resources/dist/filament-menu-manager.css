@@ -6,7 +6,7 @@
 /* ================== Layout ================= */
 .fmm-manager {
     display: grid;
-    grid-template-columns: 1fr 320px;
+    grid-template-columns: 1fr 450px;
     gap: 1.25rem;
     align-items: start;
 }
