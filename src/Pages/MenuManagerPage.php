@@ -18,11 +18,11 @@ class MenuManagerPage extends Page implements HasForms
 {
     use InteractsWithForms;
 
-    protected static string $view = 'filament-menu-manager::pages.menu-manager';
+    protected string $view = 'filament-menu-manager::pages.menu-manager';
 
     protected static \UnitEnum|string|null $navigationGroup = 'Content';
     protected static \BackedEnum|string|null $navigationIcon = 'heroicon-o-bars-3';
-    protected static string|\Illuminate\Contracts\Support\Htmlable|null $navigationLabel = 'Menu Manager';
+    protected static ?string $navigationLabel = 'Menu Manager';
     protected static ?int $navigationSort = 99;
 
     public static function getNavigationGroup(): \UnitEnum|string|null
@@ -35,9 +35,9 @@ class MenuManagerPage extends Page implements HasForms
         return \NoteBrainsLab\FilamentMenuManager\FilamentMenuManagerPlugin::get()->getNavigationIcon() ?? static::$navigationIcon;
     }
 
-    public static function getNavigationLabel(): string|\Illuminate\Contracts\Support\Htmlable
+    public static function getNavigationLabel(): string
     {
-        return \NoteBrainsLab\FilamentMenuManager\FilamentMenuManagerPlugin::get()->getNavigationLabel() ?? static::$navigationLabel;
+        return (string) (\NoteBrainsLab\FilamentMenuManager\FilamentMenuManagerPlugin::get()->getNavigationLabel() ?? static::$navigationLabel);
     }
 
     public static function getNavigationSort(): ?int
