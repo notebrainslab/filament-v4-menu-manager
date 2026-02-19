@@ -42,17 +42,44 @@ class MenuManager
     }
 
     /**
-     * Sync configured locations into the DB (create if missing).
+     * Sync configured locations into the DB (create if missing, update if exists, delete if removed from config).
      */
     public function syncLocations(): void
     {
         $locationModel = config('filament-menu-manager.models.menu_location', MenuLocation::class);
+        $menuModel     = config('filament-menu-manager.models.menu', Menu::class);
+        $itemModel     = config('filament-menu-manager.models.menu_item', MenuItem::class);
 
+        $handles = array_keys($this->locations);
+
+        // Update or create locations from config
         foreach ($this->locations as $handle => $name) {
-            $locationModel::firstOrCreate(
+            $locationModel::updateOrCreate(
                 ['handle' => $handle],
                 ['name'   => $name]
             );
+        }
+
+        // Get deprecated locations
+        $deprecated = $locationModel::whereNotIn('handle', $handles)->get();
+
+        if ($deprecated->isNotEmpty()) {
+            $deprecatedIds = $deprecated->pluck('id')->toArray();
+            
+            // 1. Find all menus belonging to these locations
+            $menuIds = $menuModel::whereIn('menu_location_id', $deprecatedIds)->pluck('id')->toArray();
+            
+            if (!empty($menuIds)) {
+                // 2. Delete all items belonging to these menus first
+                // (This avoids the parent_id nullOnDelete race condition)
+                $itemModel::whereIn('menu_id', $menuIds)->delete();
+                
+                // 3. Delete the menus
+                $menuModel::whereIn('id', $menuIds)->delete();
+            }
+
+            // 4. Finally delete the locations
+            $locationModel::whereIn('id', $deprecatedIds)->delete();
         }
     }
 
