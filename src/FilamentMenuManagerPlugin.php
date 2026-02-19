@@ -10,10 +10,10 @@ class FilamentMenuManagerPlugin implements Plugin
 {
     protected array $locations   = [];
     protected array $modelSources = [];
-    protected ?string $navigationGroup = null;
-    protected ?string $navigationIcon  = null;
-    protected ?int    $navigationSort  = null;
-    protected ?string $navigationLabel = null;
+    protected \UnitEnum|string|null $navigationGroup = null;
+    protected string|\Illuminate\Contracts\Support\Htmlable|null $navigationIcon = null;
+    protected ?int $navigationSort = null;
+    protected string|\Illuminate\Contracts\Support\Htmlable|null $navigationLabel = null;
 
     // -------------------------------------------------------------------------
     // Static constructor (fluent API entry point)
@@ -88,36 +88,36 @@ class FilamentMenuManagerPlugin implements Plugin
         return $this;
     }
 
-    public function navigationGroup(string $group): static
+    public function navigationGroup(\UnitEnum|string|null $group): static
     {
         $this->navigationGroup = $group;
         return $this;
     }
 
-    public function navigationIcon(string $icon): static
+    public function navigationIcon(string|\Illuminate\Contracts\Support\Htmlable|null $icon): static
     {
         $this->navigationIcon = $icon;
         return $this;
     }
 
-    public function navigationSort(int $sort): static
+    public function navigationSort(?int $sort): static
     {
         $this->navigationSort = $sort;
         return $this;
     }
 
-    public function navigationLabel(string $label): static
+    public function navigationLabel(string|\Illuminate\Contracts\Support\Htmlable|null $label): static
     {
         $this->navigationLabel = $label;
         return $this;
     }
 
-    public function getNavigationGroup(): ?string
+    public function getNavigationGroup(): \UnitEnum|string|null
     {
         return $this->navigationGroup;
     }
 
-    public function getNavigationIcon(): ?string
+    public function getNavigationIcon(): string|\Illuminate\Contracts\Support\Htmlable|null
     {
         return $this->navigationIcon;
     }
@@ -127,7 +127,7 @@ class FilamentMenuManagerPlugin implements Plugin
         return $this->navigationSort;
     }
 
-    public function getNavigationLabel(): ?string
+    public function getNavigationLabel(): string|\Illuminate\Contracts\Support\Htmlable|null
     {
         return $this->navigationLabel;
     }

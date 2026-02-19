@@ -20,22 +20,22 @@ class MenuManagerPage extends Page implements HasForms
 
     protected static string $view = 'filament-menu-manager::pages.menu-manager';
 
-    protected static ?string $navigationGroup = 'Content';
-    protected static ?string $navigationIcon  = 'heroicon-o-bars-3';
-    protected static ?string $navigationLabel = 'Menu Manager';
-    protected static ?int    $navigationSort  = 99;
+    protected static \UnitEnum|string|null $navigationGroup = 'Content';
+    protected static string|\Illuminate\Contracts\Support\Htmlable|null $navigationIcon = 'heroicon-o-bars-3';
+    protected static string|\Illuminate\Contracts\Support\Htmlable|null $navigationLabel = 'Menu Manager';
+    protected static ?int $navigationSort = 99;
 
-    public static function getNavigationGroup(): ?string
+    public static function getNavigationGroup(): \UnitEnum|string|null
     {
         return \NoteBrainsLab\FilamentMenuManager\FilamentMenuManagerPlugin::get()->getNavigationGroup() ?? static::$navigationGroup;
     }
 
-    public static function getNavigationIcon(): ?string
+    public static function getNavigationIcon(): string|\Illuminate\Contracts\Support\Htmlable|null
     {
         return \NoteBrainsLab\FilamentMenuManager\FilamentMenuManagerPlugin::get()->getNavigationIcon() ?? static::$navigationIcon;
     }
 
-    public static function getNavigationLabel(): string
+    public static function getNavigationLabel(): string|\Illuminate\Contracts\Support\Htmlable
     {
         return \NoteBrainsLab\FilamentMenuManager\FilamentMenuManagerPlugin::get()->getNavigationLabel() ?? static::$navigationLabel;
     }
