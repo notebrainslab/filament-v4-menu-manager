@@ -29,7 +29,11 @@
         </div>
 
         {{-- Sortable Tree --}}
-        <div class="fmm-root-list fmm-nested-sortable" id="fmm-root-list">
+        <div
+            class="fmm-root-list fmm-nested-sortable"
+            id="fmm-root-list"
+            x-data="menuSortable($wire)"
+        >
             @forelse($items as $item)
                 @include('filament-menu-manager::components.menu-item', ['item' => $item, 'depth' => 0])
             @empty
@@ -43,58 +47,6 @@
         </div>
 
     </div>
-
-    {{-- ===================== SortableJS Init ===================== --}}
-    <script>
-    (function() {
-        function initSortableAll() {
-            document.querySelectorAll('.fmm-nested-sortable').forEach(function(el) {
-                if (el._sortable) el._sortable.destroy();
-
-                el._sortable = Sortable.create(el, {
-                    group:      { name: 'menu-items', pull: true, put: true },
-                    animation:  150,
-                    handle:     '.fmm-drag-handle',
-                    ghostClass: 'fmm-ghost',
-                    chosenClass:'fmm-chosen',
-                    dragClass:  'fmm-dragging',
-                    swapThreshold: 0.65,
-                    fallbackOnBody: true,
-
-                    onEnd: function() {
-                        var tree = extractTree(
-                            document.getElementById('fmm-root-list')
-                        );
-                        @this.call('updateOrder', tree);
-                    }
-                });
-            });
-        }
-
-        function extractTree(container) {
-            var result = [];
-            var children = container.querySelectorAll(':scope > .fmm-item-row');
-            children.forEach(function(el) {
-                var id = parseInt(el.dataset.id, 10);
-                var nested = el.querySelector(':scope > .fmm-nested-list');
-                result.push({
-                    id: id,
-                    children: nested ? extractTree(nested) : []
-                });
-            });
-            return result;
-        }
-
-        document.addEventListener('DOMContentLoaded', initSortableAll);
-        document.addEventListener('livewire:navigated', initSortableAll);
-
-        Livewire.hook('commit', function({ component, commit, respond, succeed, fail }) {
-            succeed(function({ snapshot, effect }) {
-                queueMicrotask(initSortableAll);
-            });
-        });
-    })();
-    </script>
 @endif
 
 </div>

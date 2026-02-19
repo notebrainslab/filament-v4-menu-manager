@@ -131,14 +131,14 @@
 
     {{-- Children (recursive) --}}
     @if(!empty($item['children']))
-        <div class="fmm-nested-list fmm-nested-sortable">
+        <div class="fmm-nested-list fmm-nested-sortable" x-data="menuSortable($wire)">
             @foreach($item['children'] as $child)
                 @include('filament-menu-manager::components.menu-item', ['item' => $child, 'depth' => $depth + 1])
             @endforeach
         </div>
     @else
         {{-- Empty sortable drop zone for nesting --}}
-        <div class="fmm-nested-list fmm-nested-sortable"></div>
+        <div class="fmm-nested-list fmm-nested-sortable" x-data="menuSortable($wire)"></div>
     @endif
 
 </div>

@@ -18,12 +18,32 @@ class MenuManagerPage extends Page implements HasForms
 {
     use InteractsWithForms;
 
-    public static string $view = 'filament-menu-manager::pages.menu-manager';
+    protected static string $view = 'filament-menu-manager::pages.menu-manager';
 
-    public static string $navigationGroup = 'Content';
-    public static string $navigationIcon  = 'heroicon-o-bars-3';
-    public static string $navigationLabel = 'Menu Manager';
-    public static int    $navigationSort  = 99;
+    protected static ?string $navigationGroup = 'Content';
+    protected static ?string $navigationIcon  = 'heroicon-o-bars-3';
+    protected static ?string $navigationLabel = 'Menu Manager';
+    protected static ?int    $navigationSort  = 99;
+
+    public static function getNavigationGroup(): ?string
+    {
+        return \NoteBrainsLab\FilamentMenuManager\FilamentMenuManagerPlugin::get()->getNavigationGroup() ?? static::$navigationGroup;
+    }
+
+    public static function getNavigationIcon(): ?string
+    {
+        return \NoteBrainsLab\FilamentMenuManager\FilamentMenuManagerPlugin::get()->getNavigationIcon() ?? static::$navigationIcon;
+    }
+
+    public static function getNavigationLabel(): string
+    {
+        return \NoteBrainsLab\FilamentMenuManager\FilamentMenuManagerPlugin::get()->getNavigationLabel() ?? static::$navigationLabel;
+    }
+
+    public static function getNavigationSort(): ?int
+    {
+        return \NoteBrainsLab\FilamentMenuManager\FilamentMenuManagerPlugin::get()->getNavigationSort() ?? static::$navigationSort;
+    }
 
     // -------------------------------------------------------------------------
     // State

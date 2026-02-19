@@ -60,9 +60,6 @@ class FilamentMenuManagerPlugin implements Plugin
 
         // Sync locations to database
         $manager->syncLocations();
-
-        // Apply navigation overrides to the page
-        $this->applyNavigationOverrides();
     }
 
     // -------------------------------------------------------------------------
@@ -115,23 +112,23 @@ class FilamentMenuManagerPlugin implements Plugin
         return $this;
     }
 
-    // -------------------------------------------------------------------------
-    // Internals
-    // -------------------------------------------------------------------------
-
-    protected function applyNavigationOverrides(): void
+    public function getNavigationGroup(): ?string
     {
-        if ($this->navigationGroup !== null) {
-            MenuManagerPage::$navigationGroup = $this->navigationGroup;
-        }
-        if ($this->navigationIcon !== null) {
-            MenuManagerPage::$navigationIcon = $this->navigationIcon;
-        }
-        if ($this->navigationSort !== null) {
-            MenuManagerPage::$navigationSort = $this->navigationSort;
-        }
-        if ($this->navigationLabel !== null) {
-            MenuManagerPage::$navigationLabel = $this->navigationLabel;
-        }
+        return $this->navigationGroup;
+    }
+
+    public function getNavigationIcon(): ?string
+    {
+        return $this->navigationIcon;
+    }
+
+    public function getNavigationSort(): ?int
+    {
+        return $this->navigationSort;
+    }
+
+    public function getNavigationLabel(): ?string
+    {
+        return $this->navigationLabel;
     }
 }

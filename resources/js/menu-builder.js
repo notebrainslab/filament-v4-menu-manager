@@ -1,5 +1,8 @@
 import Sortable from 'sortablejs';
 
+// Expose Sortable globally so it can be used in inline scripts if needed
+window.Sortable = Sortable;
+
 // ============================================================
 // Filament Menu Manager — Frontend Script
 // ============================================================
@@ -10,15 +13,20 @@ function extractTree(container) {
     const children = container.querySelectorAll(':scope > .fmm-item-row');
     children.forEach(el => {
         const id = parseInt(el.dataset.id, 10);
+        if (!id) return;
+
         const nestedList = el.querySelector(':scope > .fmm-nested-list');
-        const node = { id, children: nestedList ? extractTree(nestedList) : [] };
+        const node = {
+            id: id,
+            children: nestedList ? extractTree(nestedList) : []
+        };
         result.push(node);
     });
     return result;
 }
 
 // Alpine.js component for a single sortable level
-function menuSortable(component) {
+function menuSortable(wire) {
     return {
         sortable: null,
 
@@ -28,7 +36,7 @@ function menuSortable(component) {
 
         initSortable() {
             const el = this.$el;
-            if (!el) return;
+            if (!el || el._sortable) return;
 
             this.sortable = Sortable.create(el, {
                 group: {
@@ -46,17 +54,25 @@ function menuSortable(component) {
 
                 onEnd: () => {
                     // Walk the root list to build the full tree
-                    const rootContainer = el.closest('.fmm-root-list') || el;
+                    const rootContainer = document.getElementById('fmm-root-list') || el.closest('.fmm-root-list') || el;
                     const tree = extractTree(rootContainer);
-                    component.call('updateOrder', tree);
+
+                    // Call the Livewire method
+                    if (wire) {
+                        wire.updateOrder(tree);
+                    }
                 },
             });
+
+            // Store reference to avoid re-init
+            el._sortable = this.sortable;
         },
 
         destroy() {
             if (this.sortable) {
                 this.sortable.destroy();
                 this.sortable = null;
+                this.$el._sortable = null;
             }
         },
     };
