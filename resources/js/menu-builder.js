@@ -26,7 +26,7 @@ function extractTree(container) {
 }
 
 // Alpine.js component for a single sortable level
-function menuSortable(wire) {
+function menuSortable(wire, maxDepth) {
     return {
         sortable: null,
 
@@ -42,7 +42,24 @@ function menuSortable(wire) {
                 group: {
                     name: 'menu-items',
                     pull: true,
-                    put: true,
+                    put: (to) => {
+                        if (maxDepth === null) return true;
+
+                        // Calculate depth of destination list
+                        let currentDepth = 0;
+                        let p = to.el;
+                        while (p && !p.classList.contains('fmm-root-list')) {
+                            if (p.classList.contains('fmm-nested-list')) {
+                                currentDepth++;
+                            }
+                            p = p.parentElement;
+                        }
+
+                        // We need to know the subtree depth of the item being dragged.
+                        // Since we don't have the dragged element easily here in 'put' function 
+                        // for all cases, we'll use 'onMove' for more precise control.
+                        return true;
+                    },
                 },
                 animation: 150,
                 handle: '.fmm-drag-handle',
@@ -51,6 +68,44 @@ function menuSortable(wire) {
                 dragClass: 'fmm-dragging',
                 fallbackOnBody: true,
                 swapThreshold: 0.65,
+
+                onMove: (evt) => {
+                    if (maxDepth === null) return true;
+
+                    // 1. Get depth of destination container
+                    let destDepth = 0;
+                    let p = evt.to;
+                    while (p && !p.classList.contains('fmm-root-list')) {
+                        if (p.classList.contains('fmm-nested-list')) {
+                            destDepth++;
+                        }
+                        p = p.parentElement;
+                    }
+
+                    // 2. Get relative depth of the dragged element's own subtree
+                    const getSubtreeDepth = (element) => {
+                        let maxChildDepth = 0;
+                        const nested = element.querySelector(':scope > .fmm-nested-list');
+                        if (nested) {
+                            const children = nested.querySelectorAll(':scope > .fmm-item-row');
+                            children.forEach(child => {
+                                const d = getSubtreeDepth(child) + 1;
+                                if (d > maxChildDepth) maxChildDepth = d;
+                            });
+                        }
+                        return maxChildDepth;
+                    };
+
+                    const subtreeDepth = getSubtreeDepth(evt.dragged);
+
+                    // If we are putting it into a nested list, that nested list is 1 level deeper than its parent
+                    // The destDepth already reflects the level of the container.
+                    if ((destDepth + subtreeDepth) > maxDepth) {
+                        return false;
+                    }
+
+                    return true;
+                },
 
                 onEnd: () => {
                     // Walk the root list to build the full tree

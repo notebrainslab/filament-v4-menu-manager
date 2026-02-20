@@ -32,7 +32,7 @@
         <div
             class="fmm-root-list fmm-nested-sortable"
             id="fmm-root-list"
-            x-data="menuSortable($wire)"
+            x-data="menuSortable($wire, {{ $maxDepth ?? 'null' }})"
         >
             @forelse($items as $item)
                 @include('filament-menu-manager::components.menu-item', ['item' => $item, 'depth' => 0])

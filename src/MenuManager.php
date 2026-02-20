@@ -107,7 +107,7 @@ class MenuManager
      * Save tree order from a nested array (from SortableJS).
      * Expected format: [['id' => 1, 'children' => [['id' => 2], ...]], ...]
      */
-    public function saveTree(int $menuId, array $tree, ?int $parentId = null, int &$order = 0): void
+    public function saveTree(int $menuId, array $tree, ?int $parentId = null, int &$order = 0, int $currentDepth = 0): void
     {
         $itemModel = config('filament-menu-manager.models.menu_item', MenuItem::class);
 
@@ -119,7 +119,7 @@ class MenuManager
             ]);
 
             if (! empty($node['children'])) {
-                $this->saveTree($menuId, $node['children'], $node['id'], $order);
+                $this->saveTree($menuId, $node['children'], $node['id'], $order, $currentDepth + 1);
             }
         }
     }

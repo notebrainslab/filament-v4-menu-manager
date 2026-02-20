@@ -32,6 +32,7 @@ class MenuBuilder extends Component
     // UI state
     public bool   $autoSave       = true;
     public bool   $isDirty        = false;
+    public ?int   $maxDepth       = null;
 
     // -------------------------------------------------------------------------
     // Lifecycle & events
@@ -42,6 +43,7 @@ class MenuBuilder extends Component
         $this->menuId         = $menuId;
         $this->locationHandle = $locationHandle;
         $this->autoSave       = config('filament-menu-manager.auto_save', true);
+        $this->maxDepth       = config('filament-menu-manager.max_depth');
         $this->loadItems();
     }
 
@@ -126,6 +128,16 @@ class MenuBuilder extends Component
             ->first();
 
         if ($sibling) {
+            // Check max depth before indenting
+            if ($this->maxDepth !== null) {
+                $siblingDepth = $this->getItemDepth($sibling);
+                $subtreeDepth = $this->getItemSubtreeDepth($item);
+                
+                if (($siblingDepth + 1 + $subtreeDepth) > $this->maxDepth) {
+                    return;
+                }
+            }
+
             $maxOrder  = $itemModel::where('menu_id', $item->menu_id)
                 ->where('parent_id', $sibling->id)
                 ->max('order') ?? 0;
@@ -246,6 +258,32 @@ class MenuBuilder extends Component
         $item->delete();
     }
 
+    protected function getItemDepth($item, $currentDepth = 0): int
+    {
+        if (!$item->parent_id) {
+            return $currentDepth;
+        }
+
+        $parent = $item->parent;
+        if (!$parent) {
+            return $currentDepth;
+        }
+
+        return $this->getItemDepth($parent, $currentDepth + 1);
+    }
+
+    protected function getItemSubtreeDepth($item): int
+    {
+        $maxChildDepth = 0;
+        foreach ($item->children as $child) {
+            $childDepth = $this->getItemSubtreeDepth($child) + 1;
+            if ($childDepth > $maxChildDepth) {
+                $maxChildDepth = $childDepth;
+            }
+        }
+        return $maxChildDepth;
+    }
+
     public function startEdit(int $itemId): void
     {
         $itemModel = config('filament-menu-manager.models.menu_item', MenuItem::class);
@@ -305,6 +343,7 @@ class MenuBuilder extends Component
             'items'       => $this->items,
             'hasMenu'     => $this->menuId !== null,
             'debounce'    => config('filament-menu-manager.auto_save_debounce', 800),
+            'maxDepth'    => $this->maxDepth,
         ]);
     }
 }

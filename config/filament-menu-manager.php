@@ -53,7 +53,7 @@ return [
     |--------------------------------------------------------------------------
     */
     'navigation' => [
-        'group' => 'Content',
+        'group' => 'Settings',
         'icon'  => 'heroicon-o-bars-3',
         'sort'  => 99,
         'label' => 'Menu Manager',
@@ -65,7 +65,7 @@ return [
     |--------------------------------------------------------------------------
     | Maximum allowed nesting depth for menu items. Set to null for unlimited.
     */
-    'max_depth' => null,
+    'max_depth' => 2,
 
     /*
     |--------------------------------------------------------------------------
