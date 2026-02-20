@@ -77,28 +77,6 @@ Publish the resource files (Optional):
 php artisan vendor:publish --tag="filament-menu-manager-views"
 ```
 
-`config/filament-menu-manager.php` options:
-
-```php
-return [
-    'table_prefix'       => 'fmm_',
-    'auto_save'          => true,
-    'auto_save_debounce' => 800,
-    'max_depth'          => null,  // null = unlimited
-    'navigation' => [
-        'group' => 'Content',
-        'icon'  => 'heroicon-o-bars-3',
-        'sort'  => 99,
-        'label' => 'Menu Manager',
-    ],
-    'models' => [
-        'menu_location' => \NoteBrainsLab\FilamentMenuManager\Models\MenuLocation::class,
-        'menu'          => \NoteBrainsLab\FilamentMenuManager\Models\Menu::class,
-        'menu_item'     => \NoteBrainsLab\FilamentMenuManager\Models\MenuItem::class,
-    ],
-];
-```
-
 ---
 
 ## Plugin API (Fluent)
