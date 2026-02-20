@@ -4,6 +4,7 @@ namespace NoteBrainsLab\FilamentMenuManager\Livewire;
 
 use Livewire\Component;
 use NoteBrainsLab\FilamentMenuManager\MenuManager;
+use NoteBrainsLab\FilamentMenuManager\Models\MenuItem;
 
 class MenuPanel extends Component
 {
@@ -23,18 +24,48 @@ class MenuPanel extends Component
     public string  $customUrl     = '';
     public string  $customTarget  = '_self';
     public string  $modelSearch   = '';
+    
+    // Track used model items: [ModelClass => [id1, id2, ...]]
+    public array   $usedModels    = [];
 
     // -------------------------------------------------------------------------
     // Listeners
     // -------------------------------------------------------------------------
 
     protected $listeners = [
-        'menuIdChanged' => 'onMenuChanged',
+        'menuIdChanged'        => 'onMenuChanged',
+        'menu-content-updated' => 'refreshUsedModels',
     ];
 
     public function onMenuChanged(int $menuId): void
     {
         $this->menuId = $menuId;
+        $this->refreshUsedModels();
+    }
+
+    public function mount(): void
+    {
+        if ($this->menuId) {
+            $this->refreshUsedModels();
+        }
+    }
+
+    public function refreshUsedModels(): void
+    {
+        if (! $this->menuId) {
+            $this->usedModels = [];
+            return;
+        }
+
+        $itemModel = config('filament-menu-manager.models.menu_item', MenuItem::class);
+        
+        $this->usedModels = $itemModel::where('menu_id', $this->menuId)
+            ->whereNotNull('linkable_type')
+            ->whereNotNull('linkable_id')
+            ->get()
+            ->groupBy('linkable_type')
+            ->map(fn ($items) => $items->pluck('linkable_id')->all())
+            ->toArray();
     }
 
     // -------------------------------------------------------------------------
@@ -62,6 +93,10 @@ class MenuPanel extends Component
         /** @var \NoteBrainsLab\FilamentMenuManager\Contracts\MenuItemSource $model */
         $model = $modelClass::find($modelId);
         if (! $model) return;
+
+        if (in_array($modelId, $this->usedModels[$modelClass] ?? [])) {
+            return;
+        }
 
         $this->dispatch('menuItemAdded', [
             'title'         => $model->getMenuLabel(),

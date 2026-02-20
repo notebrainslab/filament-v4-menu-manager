@@ -204,6 +204,22 @@ class MenuBuilder extends Component
         if ($this->autoSave) {
             $this->dispatch('menu-saved');
         }
+        $this->dispatch('menu-content-updated');
+    }
+
+    // -------------------------------------------------------------------------
+    // Delete Confirmation State
+    // -------------------------------------------------------------------------
+    public ?int $deletingItemId = null;
+
+    public function confirmRemoval(int $itemId): void
+    {
+        $this->deletingItemId = $itemId;
+    }
+
+    public function cancelRemoval(): void
+    {
+        $this->deletingItemId = null;
     }
 
     public function removeItem(int $itemId): void
@@ -213,6 +229,8 @@ class MenuBuilder extends Component
         $itemModel::where('parent_id', $itemId)->update(['parent_id' => null]);
         $itemModel::destroy($itemId);
         $this->loadItems();
+        $this->dispatch('menu-content-updated');
+        $this->deletingItemId = null;
     }
 
     public function startEdit(int $itemId): void

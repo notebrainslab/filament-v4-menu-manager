@@ -384,6 +384,66 @@
     transform: translateY(0);
 }
 
+/* ================== Modal (New) ================= */
+.fmm-modal-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 50;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+    background-color: rgba(17, 24, 39, 0.5); /* gray-900/50 */
+    backdrop-filter: blur(4px);
+    transition: opacity 0.3s;
+}
+
+.fmm-modal-content {
+    background: var(--fmm-card-bg);
+    border-radius: 0.75rem;
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+    width: 100%;
+    max-width: 28rem;
+    overflow: hidden;
+    color: var(--fmm-text);
+    border: 1px solid var(--fmm-border);
+    animation: fmm-modal-pop 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes fmm-modal-pop {
+    0% { transform: scale(0.95); opacity: 0; }
+    100% { transform: scale(1); opacity: 1; }
+}
+
+.fmm-btn {
+    padding: 0.5rem 1rem;
+    border-radius: 0.375rem;
+    font-size: 0.875rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    border: 1px solid transparent;
+}
+
+.fmm-btn-secondary {
+    background: var(--fmm-btn-bg);
+    color: var(--fmm-btn-text);
+    border-color: var(--fmm-btn-border);
+}
+
+.fmm-btn-secondary:hover {
+    background: var(--fmm-btn-hover-bg);
+}
+
+.fmm-btn-danger {
+    background: #dc2626; /* red-600 */
+    color: white;
+}
+
+.fmm-btn-danger:hover {
+    background: #b91c1c; /* red-700 */
+}
+
 /* ================== Drag-drop visual states ================= */
 .fmm-ghost {
     opacity: 0.4;
