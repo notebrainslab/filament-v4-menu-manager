@@ -225,12 +225,25 @@ class MenuBuilder extends Component
     public function removeItem(int $itemId): void
     {
         $itemModel = config('filament-menu-manager.models.menu_item', MenuItem::class);
-        // Recursively re-parent children before deletion
-        $itemModel::where('parent_id', $itemId)->update(['parent_id' => null]);
-        $itemModel::destroy($itemId);
+        $item = $itemModel::find($itemId);
+        
+        if ($item) {
+            $this->deleteItemRecursive($item);
+        }
+
         $this->loadItems();
         $this->dispatch('menu-content-updated');
         $this->deletingItemId = null;
+    }
+
+    protected function deleteItemRecursive($item): void
+    {
+        // Recursively delete children
+        foreach ($item->children as $child) {
+            $this->deleteItemRecursive($child);
+        }
+        
+        $item->delete();
     }
 
     public function startEdit(int $itemId): void
