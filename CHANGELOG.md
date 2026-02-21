@@ -2,6 +2,12 @@
 
 All notable changes to `filament-menu-manager` will be documented in this file.
 
+## [2.0.0] — 2026-02-21
+
+### Added
+- **Filament v5 Support** — Added compatibility with the newly released Filament v5 core while maintaining full support for v4.
+- **Livewire v4 Support** — Added compatibility with Livewire v4 to ensure smooth integration with the latest Laravel environments.
+
 ## [1.0.0] — 2024-02-19
 
 ### Added

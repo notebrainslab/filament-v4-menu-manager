@@ -3,7 +3,7 @@
 [![Latest Version on Packagist](https://img.shields.io/packagist/v/notebrainslab/filament-menu-manager.svg?style=flat-square)](https://packagist.org/packages/notebrainslab/filament-menu-manager)
 [![License](https://img.shields.io/packagist/l/notebrainslab/filament-menu-manager.svg?style=flat-square)](https://packagist.org/packages/notebrainslab/filament-menu-manager)
 
-A powerful **Filament v4** plugin for managing navigation menus with:
+A powerful **Filament v4 & v5** plugin for managing navigation menus with:
 
 - ✅ **Multiple Locations** — Primary, Footer, Sidebar, or any custom location
 - ✅ **Drag & Drop Reordering** — Powered by SortableJS with nested support
@@ -21,8 +21,8 @@ A powerful **Filament v4** plugin for managing navigation menus with:
 |---|---|
 | PHP | `^8.2` |
 | Laravel | `^12.0` |
-| Filament | `^4.0` |
-| Livewire | `^3.0` |
+| Filament | `^4.0 \| ^5.0` |
+| Livewire | `^3.0 \| ^4.0` |
 
 ---
 

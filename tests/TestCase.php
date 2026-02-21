@@ -10,6 +10,8 @@ abstract class TestCase extends BaseTestCase
     protected function getPackageProviders($app): array
     {
         return [
+            \Livewire\LivewireServiceProvider::class,
+            \Filament\Support\SupportServiceProvider::class,
             FilamentMenuManagerServiceProvider::class,
         ];
     }
