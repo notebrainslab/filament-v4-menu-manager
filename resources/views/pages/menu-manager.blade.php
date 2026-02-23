@@ -43,14 +43,14 @@
 
             {{-- Builder --}}
             @livewire(
-                'filament-menu-manager::menu-builder',
+                'filament-menu-manager.menu-builder',
                 ['menuId' => $activeMenuId, 'locationHandle' => $activeLocationHandle],
                 key('builder-' . $activeMenuId)
             )
 
             {{-- Panel --}}
             @livewire(
-                'filament-menu-manager::menu-panel',
+                'filament-menu-manager.menu-panel',
                 ['menuId' => $activeMenuId, 'locationHandle' => $activeLocationHandle],
                 key('panel-' . $activeMenuId)
             )

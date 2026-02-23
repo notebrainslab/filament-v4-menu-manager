@@ -39,8 +39,8 @@ class FilamentMenuManagerServiceProvider extends PackageServiceProvider
     public function packageBooted(): void
     {
         // Register Livewire components
-        Livewire::component('filament-menu-manager::menu-builder', MenuBuilder::class);
-        Livewire::component('filament-menu-manager::menu-panel', MenuPanel::class);
+        Livewire::component('filament-menu-manager.menu-builder', MenuBuilder::class);
+        Livewire::component('filament-menu-manager.menu-panel', MenuPanel::class);
 
         // Register Filament assets
         \Filament\Support\Facades\FilamentAsset::register([
