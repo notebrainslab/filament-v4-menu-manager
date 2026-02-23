@@ -1,7 +1,6 @@
 {
     "name": "notebrainslab/filament-menu-manager",
     "description": "A powerful Filament v4 & v5 plugin for managing menus with multiple locations, drag & drop reordering, Eloquent model support, auto-save, and dark theme.",
-    "version": "1.0.0",
     "keywords": [
         "filament",
         "laravel",
